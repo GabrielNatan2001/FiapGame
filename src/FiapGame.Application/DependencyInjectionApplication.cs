@@ -1,3 +1,4 @@
+using FiapGame.Application.Jogo.Services;
 using FiapGame.Application.Usuario.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,10 @@ public static class DependencyInjectionApplication
     {
         services.AddScoped<CriarUsuarioService>();
         services.AddScoped<AutenticarUsuarioService>();
+        services.AddScoped<CriarJogoService>();
+        services.AddScoped<ListarJogosService>();
+        services.AddScoped<AdquirirJogoService>();
+        services.AddScoped<ListarBibliotecaService>();
 
         return services;
     }

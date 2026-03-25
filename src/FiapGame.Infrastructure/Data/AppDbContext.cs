@@ -1,4 +1,5 @@
-﻿using FiapGame.Domain.Usuario.Entities;
+using FiapGame.Domain.Jogo.Entities;
+using FiapGame.Domain.Usuario.Entities;
 using FiapGame.Shared.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,8 @@ public class AppDbContext : DbContext
     : base(options) { }
 
     public DbSet<UsuarioEntity> Usuarios { get; set; }
+    public DbSet<JogoEntity> Jogos { get; set; }
+    public DbSet<UsuarioJogoEntity> UsuarioJogos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

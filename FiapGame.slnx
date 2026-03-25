@@ -6,5 +6,7 @@
     <Project Path="src/FiapGame.Infrastructure/FiapGame.Infrastructure.csproj" />
     <Project Path="src/FiapGame.Shared/FiapGame.Shared.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/FiapGame.Domain.Tests/FiapGame.Domain.Tests.csproj" />
+  </Folder>
 </Solution>
