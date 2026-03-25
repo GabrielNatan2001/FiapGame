@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FiapGame.CrossCuttings\FiapGame.Shared.csproj" />
     <ProjectReference Include="..\FiapGame.Domain\FiapGame.Domain.csproj" />
     <ProjectReference Include="..\FiapGame.Infrastructure\FiapGame.Infrastructure.csproj" />
     <ProjectReference Include="..\FiapGame.Shared\FiapGame.Shared.csproj" />
