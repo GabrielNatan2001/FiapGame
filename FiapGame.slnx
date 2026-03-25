@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="FiapGame.CrossCuttings/FiapGame.Shared.csproj" />
+    <Project Path="src/FiapGame.API/FiapGame.API.csproj" />
+    <Project Path="src/FiapGame.Application/FiapGame.Application.csproj" />
+    <Project Path="src/FiapGame.Domain/FiapGame.Domain.csproj" />
+    <Project Path="src/FiapGame.Infrastructure/FiapGame.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>

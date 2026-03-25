@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FiapGame.CrossCuttings\FiapGame.Shared.csproj" />
+    <ProjectReference Include="..\FiapGame.Domain\FiapGame.Domain.csproj" />
+    <ProjectReference Include="..\FiapGame.Infrastructure\FiapGame.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
