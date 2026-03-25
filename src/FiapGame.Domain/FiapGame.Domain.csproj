@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FiapGame.CrossCuttings\FiapGame.Shared.csproj" />
+    <ProjectReference Include="..\FiapGame.CrossCuttings\FiapGame.Shared.csproj" />
+    <ProjectReference Include="..\FiapGame.Shared\FiapGame.Shared.csproj" />
   </ItemGroup>
 
 </Project>
