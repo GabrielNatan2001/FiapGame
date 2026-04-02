@@ -18,7 +18,7 @@ public class JogoController : ControllerBase
     }
 
     [HttpGet("ativos")]
-    [Authorize] // Qualquer usuario logado pode ver ativos
+    [Authorize]
     public async Task<IActionResult> ListarAtivos([FromServices] ListarJogosAtivosService service)
     {
         var result = await service.Execute();
