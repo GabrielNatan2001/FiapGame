@@ -47,7 +47,7 @@ public class AdquirirJogoServiceTests
         // Arrange
         var usuarioId = Guid.NewGuid();
         var jogoId = Guid.NewGuid();
-        var jogo = JogoEntity.Criar("Jogo Existente", "Descricao", 100);
+        var jogo = JogoEntity.Criar("Jogo Existente", "Descricao", 100, "Ação");
 
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
         _usuarioJogoRepositoryMock.Setup(x => x.UsuarioPossuiJogo(usuarioId, jogoId)).ReturnsAsync(true);
@@ -60,6 +60,26 @@ public class AdquirirJogoServiceTests
         _usuarioJogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
     }
 
+    [Fact(DisplayName = "Adquirir Jogo Emite Excecao Quando Jogo Esta Inativo")]
+    [Trait("Categoria", "Application - AdquirirJogoService")]
+    public async Task AdquirirJogo_DeveLancarExcecao_QuandoJogoEstiverInativo()
+    {
+        // Arrange
+        var usuarioId = Guid.NewGuid();
+        var jogoId = Guid.NewGuid();
+        var jogo = JogoEntity.Criar("Jogo Inativo", "Descricao", 100, "Ação");
+        jogo.AlterarStatus(); // Inativo
+
+        _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
+
+        // Act & Assert
+        var exception = await Assert.ThrowsAsync<DomainException>(() => _sut.Execute(usuarioId, jogoId));
+        Assert.Equal("Este jogo não está disponível para aquisição.", exception.Message);
+
+        _usuarioJogoRepositoryMock.Verify(x => x.Adicionar(It.IsAny<UsuarioJogoEntity>()), Times.Never);
+        _usuarioJogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
+    }
+
     [Fact(DisplayName = "Adquirir Jogo Processa Com Sucesso Quando Valido")]
     [Trait("Categoria", "Application - AdquirirJogoService")]
     public async Task AdquirirJogo_DeveAdicionarESalvar_QuandoValido()
@@ -67,7 +87,7 @@ public class AdquirirJogoServiceTests
         // Arrange
         var usuarioId = Guid.NewGuid();
         var jogoId = Guid.NewGuid();
-        var jogo = JogoEntity.Criar("Novo Jogo", "Descricao", 50);
+        var jogo = JogoEntity.Criar("Novo Jogo", "Descricao", 50, "Ação");
 
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
         _usuarioJogoRepositoryMock.Setup(x => x.UsuarioPossuiJogo(usuarioId, jogoId)).ReturnsAsync(false);

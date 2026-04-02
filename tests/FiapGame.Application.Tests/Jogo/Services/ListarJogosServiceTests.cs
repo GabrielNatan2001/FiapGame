@@ -42,8 +42,8 @@ public class ListarJogosServiceTests
         // Arrange
         var jogosEntity = new List<JogoEntity>
         {
-            JogoEntity.Criar("Aventura 1", "Um jogo legal", 199.99m),
-            JogoEntity.Criar("Corrida Turbo", "Alta velocidade", 99.90m)
+            JogoEntity.Criar("Aventura 1", "Um jogo legal", 199.99m, "Aventura"),
+            JogoEntity.Criar("Corrida Turbo", "Alta velocidade", 99.90m, "Corrida")
         };
 
         _jogoRepositoryMock.Setup(x => x.ObterTodos()).ReturnsAsync(jogosEntity);
@@ -54,7 +54,7 @@ public class ListarJogosServiceTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(2, result.Count);
-        Assert.Contains(result, j => j.Titulo == "Aventura 1");
-        Assert.Contains(result, j => j.Titulo == "Corrida Turbo");
+        Assert.Contains(result, j => j.Nome == "Aventura 1");
+        Assert.Contains(result, j => j.Nome == "Corrida Turbo");
     }
 }

@@ -1,6 +1,6 @@
 namespace FiapGame.Application.Jogo.Dtos;
 
-public static class CriarJogoDto
+public static class AtualizarJogoDto
 {
     public sealed class Request
     {

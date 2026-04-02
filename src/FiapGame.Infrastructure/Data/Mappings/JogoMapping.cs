@@ -16,8 +16,8 @@ public class JogoMapping : IEntityTypeConfiguration<JogoEntity>
             .HasColumnName("id")
             .HasColumnType("uuid");
 
-        builder.Property(x => x.Titulo)
-            .HasColumnName("titulo")
+        builder.Property(x => x.Nome)
+            .HasColumnName("nome")
             .HasColumnType("varchar(120)")
             .IsRequired();
 
@@ -29,6 +29,16 @@ public class JogoMapping : IEntityTypeConfiguration<JogoEntity>
         builder.Property(x => x.Preco)
             .HasColumnName("preco")
             .HasColumnType("numeric(10,2)")
+            .IsRequired();
+
+        builder.Property(x => x.Categoria)
+            .HasColumnName("categoria")
+            .HasColumnType("varchar(100)")
+            .IsRequired();
+
+        builder.Property(x => x.Status)
+            .HasColumnName("status")
+            .HasColumnType("integer")
             .IsRequired();
 
         builder.Property(x => x.DtCadastro)

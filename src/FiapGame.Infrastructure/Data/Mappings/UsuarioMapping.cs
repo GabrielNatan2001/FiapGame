@@ -1,4 +1,4 @@
-﻿
+
 using FiapGame.Domain.Usuario.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -26,6 +26,11 @@ namespace FiapGame.Infrastructure.Data.Mappings
                 .HasColumnName("role")
                 .HasConversion<string>()
                 .HasColumnType("varchar(20)")
+                .IsRequired();
+
+            builder.Property(u => u.Status)
+                .HasColumnName("status")
+                .HasColumnType("integer")
                 .IsRequired();
 
             builder.OwnsOne(u => u.Email, email =>

@@ -1,5 +1,6 @@
 using FiapGame.Application.Abstractions.Security;
 using FiapGame.Application.Usuario.Dtos;
+using FiapGame.Domain.Common.Enums;
 using FiapGame.Domain.Usuario.Interfaces;
 using FiapGame.Shared.Exceptions;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,12 @@ public class AutenticarUsuarioService
         {
             _logger.LogWarning("Falha de autenticacao para o email informado.");
             throw new DomainException("Email ou senha inválidos.");
+        }
+
+        if (usuario.Status != EStatus.Ativo)
+        {
+            _logger.LogWarning("Usuario {Email} tentou autenticar porem esta inativo.", request.Email);
+            throw new DomainException("Usuário inativo. Entre em contato com o suporte.");
         }
 
         var accessToken = _tokenProvider.GerarToken(usuario);

@@ -10,8 +10,16 @@ namespace FiapGame.API.Controllers;
 public class JogoController : ControllerBase
 {
     [HttpGet]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Listar([FromServices] ListarJogosService service)
+    {
+        var result = await service.Execute();
+        return Ok(result);
+    }
+
+    [HttpGet("ativos")]
+    [Authorize] // Qualquer usuario logado pode ver ativos
+    public async Task<IActionResult> ListarAtivos([FromServices] ListarJogosAtivosService service)
     {
         var result = await service.Execute();
         return Ok(result);
@@ -25,5 +33,26 @@ public class JogoController : ControllerBase
     {
         var id = await service.Execute(request);
         return CreatedAtAction(nameof(Listar), new { id }, new { id });
+    }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Atualizar(
+        Guid id,
+        [FromServices] AtualizarJogoService service,
+        [FromBody] AtualizarJogoDto.Request request)
+    {
+        await service.Execute(id, request);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/status")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> AlterarStatus(
+        Guid id,
+        [FromServices] AlterarStatusJogoService service)
+    {
+        await service.Execute(id);
+        return NoContent();
     }
 }

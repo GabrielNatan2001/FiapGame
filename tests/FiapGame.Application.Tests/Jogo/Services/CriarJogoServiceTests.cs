@@ -27,9 +27,10 @@ public class CriarJogoServiceTests
         // Arrange
         var request = new CriarJogoDto.Request
         {
-            Titulo = "Novo Jogo",
+            Nome = "Novo Jogo",
             Descricao = "Descrição do jogo",
-            Preco = 150.0m
+            Preco = 150.0m,
+            Categoria = "Ação"
         };
 
         _jogoRepositoryMock.Setup(x => x.Adicionar(It.IsAny<JogoEntity>())).Returns(Task.CompletedTask);
@@ -41,9 +42,10 @@ public class CriarJogoServiceTests
         // Assert
         Assert.NotEqual(Guid.Empty, result);
         _jogoRepositoryMock.Verify(x => x.Adicionar(It.Is<JogoEntity>(j => 
-            j.Titulo == request.Titulo && 
+            j.Nome == request.Nome && 
             j.Descricao == request.Descricao && 
-            j.Preco == request.Preco)), Times.Once);
+            j.Preco == request.Preco &&
+            j.Categoria == request.Categoria)), Times.Once);
         _jogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Once);
     }
 }

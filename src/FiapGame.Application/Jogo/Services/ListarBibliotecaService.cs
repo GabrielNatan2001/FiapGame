@@ -19,9 +19,11 @@ public class ListarBibliotecaService
             .Select(x => new JogoItemDto
             {
                 Id = x.Id,
-                Titulo = x.Titulo,
+                Nome = x.Nome,
                 Descricao = x.Descricao,
-                Preco = x.Preco
+                Preco = x.Preco,
+                Categoria = x.Categoria,
+                Status = x.Status
             })
             .ToList();
     }

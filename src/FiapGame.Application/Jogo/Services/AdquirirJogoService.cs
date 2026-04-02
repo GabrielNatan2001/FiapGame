@@ -1,3 +1,4 @@
+using FiapGame.Domain.Common.Enums;
 using FiapGame.Domain.Jogo.Entities;
 using FiapGame.Domain.Jogo.Interfaces;
 using FiapGame.Shared.Exceptions;
@@ -20,6 +21,9 @@ public class AdquirirJogoService
         var jogo = await _jogoRepository.ObterPorId(jogoId);
         if (jogo is null)
             throw new DomainException("Jogo não encontrado.");
+
+        if (jogo.Status != EStatus.Ativo)
+            throw new DomainException("Este jogo não está disponível para aquisição.");
 
         if (await _usuarioJogoRepository.UsuarioPossuiJogo(usuarioId, jogoId))
             throw new DomainException("Jogo já adquirido para este usuário.");
