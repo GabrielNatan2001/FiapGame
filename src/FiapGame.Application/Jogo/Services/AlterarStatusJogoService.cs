@@ -18,7 +18,10 @@ public class AlterarStatusJogoService
         if (jogo is null)
             throw new DomainException("Jogo não encontrado.");
 
-        jogo.AlterarStatus();
+        if (jogo.Status == FiapGame.Domain.Common.Enums.EStatus.Ativo)
+            jogo.Desativar();
+        else
+            jogo.Ativar();
         
         _jogoRepository.Atualizar(jogo);
         await _jogoRepository.SalvarAlteracoes();

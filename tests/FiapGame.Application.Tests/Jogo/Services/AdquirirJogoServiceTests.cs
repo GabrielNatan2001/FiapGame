@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using FiapGame.Application.Jogo.Services;
+using FiapGame.Domain.Biblioteca.Entities;
+using FiapGame.Domain.Biblioteca.Interfaces;
 using FiapGame.Domain.Jogo.Entities;
 using FiapGame.Domain.Jogo.Interfaces;
 using FiapGame.Shared.Exceptions;
@@ -12,14 +14,14 @@ namespace FiapGame.Application.Tests.Jogo.Services;
 public class AdquirirJogoServiceTests
 {
     private readonly Mock<IJogoRepository> _jogoRepositoryMock;
-    private readonly Mock<IUsuarioJogoRepository> _usuarioJogoRepositoryMock;
+    private readonly Mock<IBibliotecaRepository> _bibliotecaRepositoryMock;
     private readonly AdquirirJogoService _sut;
 
     public AdquirirJogoServiceTests()
     {
         _jogoRepositoryMock = new Mock<IJogoRepository>();
-        _usuarioJogoRepositoryMock = new Mock<IUsuarioJogoRepository>();
-        _sut = new AdquirirJogoService(_jogoRepositoryMock.Object, _usuarioJogoRepositoryMock.Object);
+        _bibliotecaRepositoryMock = new Mock<IBibliotecaRepository>();
+        _sut = new AdquirirJogoService(_jogoRepositoryMock.Object, _bibliotecaRepositoryMock.Object);
     }
 
     [Fact(DisplayName = "Adquirir Jogo Emite Excecao Quando Jogo Nao Existe")]
@@ -36,8 +38,7 @@ public class AdquirirJogoServiceTests
         var exception = await Assert.ThrowsAsync<DomainException>(() => _sut.Execute(usuarioId, jogoId));
         Assert.Equal("Jogo não encontrado.", exception.Message);
 
-        _usuarioJogoRepositoryMock.Verify(x => x.Adicionar(It.IsAny<UsuarioJogoEntity>()), Times.Never);
-        _usuarioJogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
+        _bibliotecaRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
     }
 
     [Fact(DisplayName = "Adquirir Jogo Emite Excecao Quando Usuario Ja Possui Jogo")]
@@ -48,16 +49,17 @@ public class AdquirirJogoServiceTests
         var usuarioId = Guid.NewGuid();
         var jogoId = Guid.NewGuid();
         var jogo = JogoEntity.Criar("Jogo Existente", "Descricao", 100, "Ação");
+        var biblioteca = BibliotecaEntity.Criar(usuarioId);
+        biblioteca.AdicionarJogo(jogoId);
 
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
-        _usuarioJogoRepositoryMock.Setup(x => x.UsuarioPossuiJogo(usuarioId, jogoId)).ReturnsAsync(true);
+        _bibliotecaRepositoryMock.Setup(x => x.ObterPorUsuarioId(usuarioId)).ReturnsAsync(biblioteca);
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<DomainException>(() => _sut.Execute(usuarioId, jogoId));
-        Assert.Equal("Jogo já adquirido para este usuário.", exception.Message);
+        Assert.Equal("Este jogo já está na sua biblioteca.", exception.Message);
 
-        _usuarioJogoRepositoryMock.Verify(x => x.Adicionar(It.IsAny<UsuarioJogoEntity>()), Times.Never);
-        _usuarioJogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
+        _bibliotecaRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
     }
 
     [Fact(DisplayName = "Adquirir Jogo Emite Excecao Quando Jogo Esta Inativo")]
@@ -68,7 +70,7 @@ public class AdquirirJogoServiceTests
         var usuarioId = Guid.NewGuid();
         var jogoId = Guid.NewGuid();
         var jogo = JogoEntity.Criar("Jogo Inativo", "Descricao", 100, "Ação");
-        jogo.AlterarStatus(); // Inativo
+        jogo.Desativar(); // Inativo
 
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
 
@@ -76,8 +78,7 @@ public class AdquirirJogoServiceTests
         var exception = await Assert.ThrowsAsync<DomainException>(() => _sut.Execute(usuarioId, jogoId));
         Assert.Equal("Este jogo não está disponível para aquisição.", exception.Message);
 
-        _usuarioJogoRepositoryMock.Verify(x => x.Adicionar(It.IsAny<UsuarioJogoEntity>()), Times.Never);
-        _usuarioJogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
+        _bibliotecaRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Never);
     }
 
     [Fact(DisplayName = "Adquirir Jogo Processa Com Sucesso Quando Valido")]
@@ -88,17 +89,39 @@ public class AdquirirJogoServiceTests
         var usuarioId = Guid.NewGuid();
         var jogoId = Guid.NewGuid();
         var jogo = JogoEntity.Criar("Novo Jogo", "Descricao", 50, "Ação");
+        var biblioteca = BibliotecaEntity.Criar(usuarioId);
 
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
-        _usuarioJogoRepositoryMock.Setup(x => x.UsuarioPossuiJogo(usuarioId, jogoId)).ReturnsAsync(false);
-        _usuarioJogoRepositoryMock.Setup(x => x.Adicionar(It.IsAny<UsuarioJogoEntity>())).Returns(Task.CompletedTask);
-        _usuarioJogoRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
+        _bibliotecaRepositoryMock.Setup(x => x.ObterPorUsuarioId(usuarioId)).ReturnsAsync(biblioteca);
+        _bibliotecaRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
 
         // Act
         await _sut.Execute(usuarioId, jogoId);
 
         // Assert
-        _usuarioJogoRepositoryMock.Verify(x => x.Adicionar(It.Is<UsuarioJogoEntity>(uj => uj.UsuarioId == usuarioId && uj.JogoId == jogoId)), Times.Once);
-        _usuarioJogoRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Once);
+        Assert.Contains(biblioteca.Itens, x => x.JogoId == jogoId);
+        _bibliotecaRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Once);
+    }
+
+    [Fact(DisplayName = "Adquirir Jogo Cria Biblioteca Quando Nao Existe")]
+    [Trait("Categoria", "Application - AdquirirJogoService")]
+    public async Task AdquirirJogo_DeveCriarBiblioteca_QuandoUsuarioNaoTiverUma()
+    {
+        // Arrange
+        var usuarioId = Guid.NewGuid();
+        var jogoId = Guid.NewGuid();
+        var jogo = JogoEntity.Criar("Novo Jogo", "Descricao", 50, "Ação");
+
+        _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
+        _bibliotecaRepositoryMock.Setup(x => x.ObterPorUsuarioId(usuarioId)).ReturnsAsync((BibliotecaEntity?)null);
+        _bibliotecaRepositoryMock.Setup(x => x.Adicionar(It.IsAny<BibliotecaEntity>())).Returns(Task.CompletedTask);
+        _bibliotecaRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
+
+        // Act
+        await _sut.Execute(usuarioId, jogoId);
+
+        // Assert
+        _bibliotecaRepositoryMock.Verify(x => x.Adicionar(It.Is<BibliotecaEntity>(b => b.UsuarioId == usuarioId)), Times.Once);
+        _bibliotecaRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Once);
     }
 }

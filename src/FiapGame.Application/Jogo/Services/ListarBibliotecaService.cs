@@ -1,20 +1,20 @@
 using FiapGame.Application.Jogo.Dtos;
-using FiapGame.Domain.Jogo.Interfaces;
+using FiapGame.Domain.Biblioteca.Interfaces;
 
 namespace FiapGame.Application.Jogo.Services;
 
 public class ListarBibliotecaService
 {
-    private readonly IUsuarioJogoRepository _usuarioJogoRepository;
+    private readonly IBibliotecaRepository _bibliotecaRepository;
 
-    public ListarBibliotecaService(IUsuarioJogoRepository usuarioJogoRepository)
+    public ListarBibliotecaService(IBibliotecaRepository bibliotecaRepository)
     {
-        _usuarioJogoRepository = usuarioJogoRepository;
+        _bibliotecaRepository = bibliotecaRepository;
     }
 
     public async Task<IReadOnlyCollection<JogoItemDto>> Execute(Guid usuarioId)
     {
-        var jogos = await _usuarioJogoRepository.ObterBiblioteca(usuarioId);
+        var jogos = await _bibliotecaRepository.ObterJogosDaBiblioteca(usuarioId);
         return jogos
             .Select(x => new JogoItemDto
             {

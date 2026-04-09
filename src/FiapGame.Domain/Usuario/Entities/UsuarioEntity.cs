@@ -44,8 +44,13 @@ public class UsuarioEntity : BaseEntity
         return usuario;
     }
 
-    public void AlterarStatus()
+    public void Ativar()
     {
-        Status = Status == EStatus.Ativo ? EStatus.Inativo : EStatus.Ativo;
+        Status = EStatus.Ativo;
+    }
+
+    public void Inativar()
+    {
+        Status = EStatus.Inativo;
     }
 }

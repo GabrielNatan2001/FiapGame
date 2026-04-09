@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using FiapGame.Application.Jogo.Services;
+using FiapGame.Domain.Biblioteca.Interfaces;
 using FiapGame.Domain.Jogo.Entities;
-using FiapGame.Domain.Jogo.Interfaces;
 using Moq;
 using Xunit;
 
@@ -12,13 +11,13 @@ namespace FiapGame.Application.Tests.Jogo.Services;
 
 public class ListarBibliotecaServiceTests
 {
-    private readonly Mock<IUsuarioJogoRepository> _usuarioJogoRepositoryMock;
+    private readonly Mock<IBibliotecaRepository> _bibliotecaRepositoryMock;
     private readonly ListarBibliotecaService _sut;
 
     public ListarBibliotecaServiceTests()
     {
-        _usuarioJogoRepositoryMock = new Mock<IUsuarioJogoRepository>();
-        _sut = new ListarBibliotecaService(_usuarioJogoRepositoryMock.Object);
+        _bibliotecaRepositoryMock = new Mock<IBibliotecaRepository>();
+        _sut = new ListarBibliotecaService(_bibliotecaRepositoryMock.Object);
     }
 
     [Fact(DisplayName = "Listar Biblioteca Retorna Lista De Jogos Do Usuario")]
@@ -33,7 +32,7 @@ public class ListarBibliotecaServiceTests
             JogoEntity.Criar("Jogo 2", "Descricao 2", 20.0m, "Aventura")
         };
 
-        _usuarioJogoRepositoryMock.Setup(x => x.ObterBiblioteca(usuarioId)).ReturnsAsync(jogosEntity);
+        _bibliotecaRepositoryMock.Setup(x => x.ObterJogosDaBiblioteca(usuarioId)).ReturnsAsync(jogosEntity);
 
         // Act
         var result = await _sut.Execute(usuarioId);

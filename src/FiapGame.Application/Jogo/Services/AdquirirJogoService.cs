@@ -1,4 +1,6 @@
 using FiapGame.Domain.Common.Enums;
+using FiapGame.Domain.Biblioteca.Entities;
+using FiapGame.Domain.Biblioteca.Interfaces;
 using FiapGame.Domain.Jogo.Entities;
 using FiapGame.Domain.Jogo.Interfaces;
 using FiapGame.Shared.Exceptions;
@@ -8,12 +10,12 @@ namespace FiapGame.Application.Jogo.Services;
 public class AdquirirJogoService
 {
     private readonly IJogoRepository _jogoRepository;
-    private readonly IUsuarioJogoRepository _usuarioJogoRepository;
+    private readonly IBibliotecaRepository _bibliotecaRepository;
 
-    public AdquirirJogoService(IJogoRepository jogoRepository, IUsuarioJogoRepository usuarioJogoRepository)
+    public AdquirirJogoService(IJogoRepository jogoRepository, IBibliotecaRepository bibliotecaRepository)
     {
         _jogoRepository = jogoRepository;
-        _usuarioJogoRepository = usuarioJogoRepository;
+        _bibliotecaRepository = bibliotecaRepository;
     }
 
     public async Task Execute(Guid usuarioId, Guid jogoId)
@@ -25,10 +27,15 @@ public class AdquirirJogoService
         if (jogo.Status != EStatus.Ativo)
             throw new DomainException("Este jogo não está disponível para aquisição.");
 
-        if (await _usuarioJogoRepository.UsuarioPossuiJogo(usuarioId, jogoId))
-            throw new DomainException("Jogo já adquirido para este usuário.");
+        var biblioteca = await _bibliotecaRepository.ObterPorUsuarioId(usuarioId);
+        
+        if (biblioteca is null)
+        {
+            biblioteca = BibliotecaEntity.Criar(usuarioId);
+            await _bibliotecaRepository.Adicionar(biblioteca);
+        }
 
-        await _usuarioJogoRepository.Adicionar(UsuarioJogoEntity.Criar(usuarioId, jogoId));
-        await _usuarioJogoRepository.SalvarAlteracoes();
+        biblioteca.AdicionarJogo(jogoId);
+        await _bibliotecaRepository.SalvarAlteracoes();
     }
 }

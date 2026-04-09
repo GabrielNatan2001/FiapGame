@@ -64,7 +64,7 @@ public class AutenticarUsuarioServiceTests
         // Arrange
         var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaCorreta!" };
         var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta!");
-        usuario.AlterarStatus(); // Inativo
+        usuario.Inativar(); // Inativo
         
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync(usuario);
 

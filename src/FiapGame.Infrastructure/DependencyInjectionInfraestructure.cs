@@ -1,3 +1,4 @@
+using FiapGame.Domain.Biblioteca.Interfaces;
 using FiapGame.Domain.Jogo.Interfaces;
 using FiapGame.Domain.Usuario.Interfaces;
 using FiapGame.Infrastructure.Data;
@@ -21,7 +22,7 @@ public static class DependencyInjectionInfraestructure
 
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IJogoRepository, JogoRepository>();
-        services.AddScoped<IUsuarioJogoRepository, UsuarioJogoRepository>();
+        services.AddScoped<IBibliotecaRepository, BibliotecaRepository>();
 
         return services;
     }

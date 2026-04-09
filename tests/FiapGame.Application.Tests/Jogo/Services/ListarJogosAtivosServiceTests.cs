@@ -27,7 +27,7 @@ public class ListarJogosAtivosServiceTests
         // Arrange
         var jogoAtivo = JogoEntity.Criar("Ativo", "D", 10, "C");
         var jogoInativo = JogoEntity.Criar("Inativo", "D", 10, "C");
-        jogoInativo.AlterarStatus(); // Inativo
+        jogoInativo.Desativar(); // Inativo
 
         var list = new List<JogoEntity> { jogoAtivo, jogoInativo };
         _jogoRepositoryMock.Setup(x => x.ObterTodos()).ReturnsAsync(list);

@@ -54,8 +54,13 @@ public class JogoEntity : BaseEntity
         Categoria = categoria.Trim();
     }
 
-    public void AlterarStatus()
+    public void Ativar()
     {
-        Status = Status == EStatus.Ativo ? EStatus.Inativo : EStatus.Ativo;
+        Status = EStatus.Ativo;
+    }
+
+    public void Desativar()
+    {
+        Status = EStatus.Inativo;
     }
 }

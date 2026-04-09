@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+using FiapGame.Domain.Biblioteca.Entities;
 using FiapGame.Domain.Jogo.Entities;
 using FiapGame.Domain.Usuario.Entities;
 using FiapGame.Shared.Base;
@@ -12,7 +15,8 @@ public class AppDbContext : DbContext
 
     public DbSet<UsuarioEntity> Usuarios { get; set; }
     public DbSet<JogoEntity> Jogos { get; set; }
-    public DbSet<UsuarioJogoEntity> UsuarioJogos { get; set; }
+    public DbSet<BibliotecaEntity> Bibliotecas { get; set; }
+    public DbSet<ItemBibliotecaEntity> ItensBiblioteca { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
