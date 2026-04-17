@@ -1,7 +1,7 @@
 using FiapGame.Application.Jogo.Dtos;
 using FiapGame.Domain.Biblioteca.Interfaces;
 
-namespace FiapGame.Application.Jogo.Services;
+namespace FiapGame.Application.Biblioteca.Services;
 
 public class ListarBibliotecaService
 {

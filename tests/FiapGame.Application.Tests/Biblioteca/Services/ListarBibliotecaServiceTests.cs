@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FiapGame.Application.Jogo.Services;
+using FiapGame.Application.Biblioteca.Services;
 using FiapGame.Domain.Biblioteca.Interfaces;
 using FiapGame.Domain.Jogo.Entities;
 using Moq;
 using Xunit;
 
-namespace FiapGame.Application.Tests.Jogo.Services;
+namespace FiapGame.Application.Tests.Biblioteca.Services;
 
 public class ListarBibliotecaServiceTests
 {

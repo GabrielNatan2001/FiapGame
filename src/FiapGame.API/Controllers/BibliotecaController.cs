@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using FiapGame.Application.Jogo.Services;
+using FiapGame.Application.Biblioteca.Services;
 using FiapGame.Shared.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

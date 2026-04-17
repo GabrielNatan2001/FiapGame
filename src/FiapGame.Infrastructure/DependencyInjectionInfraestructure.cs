@@ -3,6 +3,7 @@ using FiapGame.Domain.Jogo.Interfaces;
 using FiapGame.Domain.Usuario.Interfaces;
 using FiapGame.Infrastructure.Data;
 using FiapGame.Infrastructure.Data.Repositories.Jogo;
+using FiapGame.Infrastructure.Data.Repositories.Biblioteca;
 using FiapGame.Infrastructure.Data.Repositories.Usuario;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -29,8 +29,8 @@ public class CriarUsuarioServiceTests
     public async Task CriarUsuario_DeveLancarExcecao_QuandoEmailJaCadastrado()
     {
         // Arrange
-        var request = new CriarUsuarioDto.Request { Nome = "Teste", Email = "teste@teste.com", Senha = "123" };
-        var usuarioExistente = UsuarioEntity.Criar("Outro", "teste@teste.com", "asd");
+        var request = new CriarUsuarioDto.Request { Nome = "Teste", Email = "teste@teste.com", Senha = "Teste123!" };
+        var usuarioExistente = UsuarioEntity.Criar("Outro", "teste@teste.com", "Teste123!");
         
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync(usuarioExistente);
 
@@ -47,18 +47,18 @@ public class CriarUsuarioServiceTests
     public async Task CriarUsuario_DeveCriarESalvar_QuandoValido()
     {
         // Arrange
-        var request = new CriarUsuarioDto.Request { Nome = "Teste", Email = "novo@teste.com", Senha = "123" };
+        var request = new CriarUsuarioDto.Request { Nome = "Teste", Email = "novo@teste.com", Senha = "Teste123!" };
         
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync((UsuarioEntity?)null);
         _usuarioRepositoryMock.Setup(x => x.Adicionar(It.IsAny<UsuarioEntity>())).Returns(Task.CompletedTask);
-        _usuarioRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
+        _usuarioRepositoryMock.Setup(x => x.SalvarAlteracoes()).ReturnsAsync(1);
 
         // Act
         var result = await _sut.Execute(request);
 
         // Assert
         Assert.NotEqual(Guid.Empty, result);
-        _usuarioRepositoryMock.Verify(x => x.Adicionar(It.Is<UsuarioEntity>(u => u.Nome == request.Nome && u.Email == request.Email)), Times.Once);
+        _usuarioRepositoryMock.Verify(x => x.Adicionar(It.Is<UsuarioEntity>(u => u.Nome == request.Nome && u.Email.Value == request.Email)), Times.Once);
         _usuarioRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Once);
     }
 }

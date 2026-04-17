@@ -1,4 +1,5 @@
 using FiapGame.Application.Jogo.Services;
+using FiapGame.Application.Biblioteca.Services;
 using FiapGame.Application.Usuario.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

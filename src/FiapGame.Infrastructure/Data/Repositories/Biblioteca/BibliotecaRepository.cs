@@ -8,7 +8,7 @@ using FiapGame.Domain.Jogo.Entities;
 using FiapGame.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace FiapGame.Infrastructure.Data.Repositories.Jogo;
+namespace FiapGame.Infrastructure.Data.Repositories.Biblioteca;
 
 public class BibliotecaRepository : IBibliotecaRepository
 {

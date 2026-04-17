@@ -25,6 +25,10 @@ public class BibliotecaMapping : IEntityTypeConfiguration<BibliotecaEntity>
             .HasForeignKey(x => x.BibliotecaId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.Navigation(x => x.Itens)
+            .HasField("_itens")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+
         builder.Property(x => x.DtCadastro)
             .HasColumnName("dt_cadastro")
             .IsRequired();
@@ -53,6 +57,8 @@ public class ItemBibliotecaMapping : IEntityTypeConfiguration<ItemBibliotecaEnti
         builder.HasOne(x => x.Jogo)
             .WithMany()
             .HasForeignKey(x => x.JogoId);
+
+        builder.HasIndex(x => new { x.BibliotecaId, x.JogoId }).IsUnique();
 
         builder.Property(x => x.DtCadastro)
             .HasColumnName("dt_cadastro")

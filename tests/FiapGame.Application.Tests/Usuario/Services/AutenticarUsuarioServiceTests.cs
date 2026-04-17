@@ -32,7 +32,7 @@ public class AutenticarUsuarioServiceTests
     public async Task AutenticarUsuario_DeveLancarExcecao_QuandoNaoEncontrarEmail()
     {
         // Arrange
-        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "123" };
+        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "Teste123!" };
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync((UsuarioEntity?)null);
 
         // Act & Assert
@@ -46,8 +46,8 @@ public class AutenticarUsuarioServiceTests
     public async Task AutenticarUsuario_DeveLancarExcecao_QuandoSenhaEstiverIncorreta()
     {
         // Arrange
-        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaErrada!" };
-        var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta!");
+        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaErrada1!" };
+        var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta1!");
         
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync(usuario);
 
@@ -62,8 +62,8 @@ public class AutenticarUsuarioServiceTests
     public async Task AutenticarUsuario_DeveLancarExcecao_QuandoUsuarioEstiverInativo()
     {
         // Arrange
-        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaCorreta!" };
-        var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta!");
+        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaCorreta1!" };
+        var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta1!");
         usuario.Inativar(); // Inativo
         
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync(usuario);
@@ -79,8 +79,8 @@ public class AutenticarUsuarioServiceTests
     public async Task AutenticarUsuario_DeveRetornarToken_QuandoValido()
     {
         // Arrange
-        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaCorreta!" };
-        var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta!");
+        var request = new AutenticarUsuarioDto.Request { Email = "teste@teste.com", Senha = "senhaCorreta1!" };
+        var usuario = UsuarioEntity.Criar("Teste", "teste@teste.com", "senhaCorreta1!");
         
         _usuarioRepositoryMock.Setup(x => x.ObterPorEmailAsync(request.Email)).ReturnsAsync(usuario);
         _tokenProviderMock.Setup(x => x.GerarToken(usuario)).Returns("my-jwt-token");

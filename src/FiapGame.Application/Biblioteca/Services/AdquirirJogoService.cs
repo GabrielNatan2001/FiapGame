@@ -5,7 +5,7 @@ using FiapGame.Domain.Jogo.Entities;
 using FiapGame.Domain.Jogo.Interfaces;
 using FiapGame.Shared.Exceptions;
 
-namespace FiapGame.Application.Jogo.Services;
+namespace FiapGame.Application.Biblioteca.Services;
 
 public class AdquirirJogoService
 {

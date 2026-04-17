@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using FiapGame.Application.Jogo.Services;
+using FiapGame.Application.Biblioteca.Services;
 using FiapGame.Domain.Biblioteca.Entities;
 using FiapGame.Domain.Biblioteca.Interfaces;
 using FiapGame.Domain.Jogo.Entities;
@@ -9,7 +9,7 @@ using FiapGame.Shared.Exceptions;
 using Moq;
 using Xunit;
 
-namespace FiapGame.Application.Tests.Jogo.Services;
+namespace FiapGame.Application.Tests.Biblioteca.Services;
 
 public class AdquirirJogoServiceTests
 {
@@ -93,7 +93,7 @@ public class AdquirirJogoServiceTests
 
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
         _bibliotecaRepositoryMock.Setup(x => x.ObterPorUsuarioId(usuarioId)).ReturnsAsync(biblioteca);
-        _bibliotecaRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
+        _bibliotecaRepositoryMock.Setup(x => x.SalvarAlteracoes()).ReturnsAsync(1);
 
         // Act
         await _sut.Execute(usuarioId, jogoId);
@@ -115,7 +115,7 @@ public class AdquirirJogoServiceTests
         _jogoRepositoryMock.Setup(x => x.ObterPorId(jogoId)).ReturnsAsync(jogo);
         _bibliotecaRepositoryMock.Setup(x => x.ObterPorUsuarioId(usuarioId)).ReturnsAsync((BibliotecaEntity?)null);
         _bibliotecaRepositoryMock.Setup(x => x.Adicionar(It.IsAny<BibliotecaEntity>())).Returns(Task.CompletedTask);
-        _bibliotecaRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
+        _bibliotecaRepositoryMock.Setup(x => x.SalvarAlteracoes()).ReturnsAsync(1);
 
         // Act
         await _sut.Execute(usuarioId, jogoId);

@@ -34,7 +34,7 @@ public class CriarJogoServiceTests
         };
 
         _jogoRepositoryMock.Setup(x => x.Adicionar(It.IsAny<JogoEntity>())).Returns(Task.CompletedTask);
-        _jogoRepositoryMock.Setup(x => x.SalvarAlteracoes()).Returns(Task.CompletedTask);
+        _jogoRepositoryMock.Setup(x => x.SalvarAlteracoes()).ReturnsAsync(1);
 
         // Act
         var result = await _sut.Execute(request);
