@@ -38,12 +38,20 @@ No startup, se nao existir usuario admin:
 
 ## Endpoints principais
 
-- `POST /api/Usuario` cria usuario.
-- `POST /api/Auth/login` autentica e retorna token JWT.
-- `GET /api/Jogo` lista jogos (autenticado).
-- `POST /api/Jogo` cria jogo (somente admin).
-- `POST /api/Biblioteca/{jogoId}` adiciona jogo a biblioteca do usuario autenticado.
-- `GET /api/Biblioteca` lista biblioteca do usuario autenticado.
+### Usuário & Autenticação
+- `POST /api/Usuario`: Criar novo usuário.
+- `POST /api/Auth/login`: Autenticar usuário e obter token JWT.
+
+### Catálogo de Jogos
+- `GET /api/Jogo`: Listar todos os jogos (Requer perfil `Admin`).
+- `GET /api/Jogo/ativos`: Listar apenas jogos ativos (Requer autenticação).
+- `POST /api/Jogo`: Cadastrar novo jogo (Requer perfil `Admin`).
+- `PUT /api/Jogo/{id}`: Atualizar dados de um jogo (Requer perfil `Admin`).
+- `PATCH /api/Jogo/{id}/status`: Alternar status (Ativar/Inativar) de um jogo (Requer perfil `Admin`).
+
+### Biblioteca
+- `POST /api/Biblioteca/{jogoId}`: Adicionar um jogo à biblioteca do usuário autenticado.
+- `GET /api/Biblioteca`: Listar jogos da biblioteca do usuário autenticado.
 
 ## Testes
 
