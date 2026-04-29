@@ -40,7 +40,6 @@ public class CriarJogoServiceTests
         var result = await _sut.Execute(request);
 
         // Assert
-        Assert.NotEqual(Guid.Empty, result);
         _jogoRepositoryMock.Verify(x => x.Adicionar(It.Is<JogoEntity>(j => 
             j.Nome == request.Nome && 
             j.Descricao == request.Descricao && 

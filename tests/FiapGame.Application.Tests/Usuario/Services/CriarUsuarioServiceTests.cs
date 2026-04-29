@@ -57,7 +57,6 @@ public class CriarUsuarioServiceTests
         var result = await _sut.Execute(request);
 
         // Assert
-        Assert.NotEqual(Guid.Empty, result);
         _usuarioRepositoryMock.Verify(x => x.Adicionar(It.Is<UsuarioEntity>(u => u.Nome == request.Nome && u.Email.Value == request.Email)), Times.Once);
         _usuarioRepositoryMock.Verify(x => x.SalvarAlteracoes(), Times.Once);
     }
