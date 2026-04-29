@@ -8,6 +8,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/FiapGame.Application.Tests/FiapGame.Application.Tests.csproj" />
+    <Project Path="tests/FiapGame.BDD.Tests/FiapGame.BDD.Tests.csproj" />
     <Project Path="tests/FiapGame.Domain.Tests/FiapGame.Domain.Tests.csproj" />
   </Folder>
 </Solution>
